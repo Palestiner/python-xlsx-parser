@@ -13,26 +13,23 @@ if len(confList) != 3:
 else:
     print("Valid config file")
 
-fromDir = confList[0].strip()
+fromFile = confList[0].strip()
+xlsx = fromFile[fromFile.rindex("\\") + 1: fromFile.index(".") + 1] + "xlsx"
 toDir = confList[1].strip()
 
 try:
     pause = int(confList[2].strip())
 except:
     pause = 5
-    print("Invalid third parametr")
+    print("Invalid third parameter")
 
-filesList = os.listdir(fromDir)
 while True:
     try:
-        for file in filesList:
-            if file.endswith(".log"):
-                df = pd.read_csv(fromDir + "\\" + file,
-                                sep="\t", encoding="iso-8859-1")
-                writer = pd.ExcelWriter(
-                    toDir + "\\" + file.replace("log", "xlsx"), engine="xlsxwriter")
-                df.to_excel(writer, "Лист1")
-                writer.save()
+        if fromFile.endswith(".log"):
+            df = pd.read_csv(fromFile, sep="\t", encoding="iso-8859-1")
+            writer = pd.ExcelWriter(toDir + "\\" + xlsx, engine="xlsxwriter")
+            df.to_excel(writer, "Лист1")
+            writer.save()
     except:
-        print("")
+        print("complete")
     time.sleep(pause * 60)
